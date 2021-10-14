@@ -6,41 +6,67 @@
 
 class Portfolio:
     """ Portfolio class will:
-            Keep track of Currency Investments.
-            Print current Holdings.
-            Calculate and print Total Portfolio Value.
+            `Keep track of Currency Investments.
+            `Print current Holdings.
+            `Calculate and print Total Portfolio Value.
     """
     def __init__(self):
         self.holdings = []
         self.holdingsCost = []
+        self.shares = []
+        self.sharesTotal = 0
         self.totalVal = 0
 
     def addHolding(self):
         # Adds Holdings in a loop until the user says stop.
-        h = input("What are your holdings? ")
+        h = input("What is the name of one of your holdings? ")
         self.holdings.append(h)
 
         p = input("What is the price of that holding? ")
-        self.totalVal = self.totalVal + int(p)
-        self.holdingsCost.append(f'${p}')
+        self.totalVal = self.totalVal + float(p)
+        self.holdingsCost.append(float(p))
 
-        ans = input("Add another holding? ")
+        s = input("How many shares do you hold? ")
+        self.sharesTotal = self.sharesTotal + int(s)
+        self.shares.append(int(s))
 
-        while ans == 'yes' or ans == 'Yes':
-            if ans == 'yes' or ans == 'Yes':
-                h = input("What are your holdings? ")
-                self.holdings.append(h)
-                p = input("What is the price of that holding? ")
-                self.totalVal = self.totalVal + int(p)
-                self.holdingsCost.append(f'${p}')
-                ans = input("Add another holding? ")
-            else:
-                pass
+        ans = input("Add another holding (y/n)? ")
+        if ans == "y" or ans == "Y":
+            repeat = True
+        if ans == 'n' or ans == "N":
+            repeat = False
+
+        while repeat == True:
+            h = input("What is the name of one of your holdings? ")
+            self.holdings.append(h)
+
+            p = input("What is the price of that holding? ")
+            self.totalVal = self.totalVal + float(p)
+            self.holdingsCost.append(float(p))
+
+            s = input("How many shares do you hold? ")
+            self.sharesTotal = self.sharesTotal + int(s)
+            self.shares.append(int(s))
+
+            ans = input("Add another holding (y/n)? ")
+            if ans == "y" or ans == "Y":
+                repeat = True
+            elif ans == 'n' or ans == "N":
+                repeat = False
+
+        #zipLists = print(dict(zip(self.holdings, self.holdingsCost)))
+        #return zipLists
 
     def findTotal(self):
-        pass
+        prntTotal = print(f"Total Portfolio Value: {self.totalVal:.2f}")
+        return prntTotal
+    
+    def printHoldings(self):
+        print("Current Holdings: ")
+        for i in range(len(self.holdings)):
+            print(f"-{self.holdings[i]}")
 
-class Currency:
+class Currency(Portfolio):
     """ Currency class will:
             Keep track of Individual Investments
             Keep track of Number of Shares
@@ -48,17 +74,19 @@ class Currency:
             Allow user to Sell currencies (Reduce Shares)
             Allow user to Buy currencies (Increase Shares)
     """
-    def __init__(self, investments, shares, price):
-        self.investments = investments
-        self.shares = shares
+    def __init__(self, investment, price):
+        self.investment = investment
+        
         self.price = price
 
-    def buy(self, sharesB):
-        self.shares.append(sharesB)
+    def buy(self):
+        super().__init__()
+        print(self.sharesTotal)
 
     def sell(self, sharesS):
         self.shares.append(sharesS)
 
+######################################################################
 # TODO: Create a menu for user to interact with system.
         # Keep showing menu until user says to stop.
 
@@ -68,7 +96,11 @@ class Currency:
 ######################################################################
 
 myPort = Portfolio()
-myPort.addHolding()
+myCurr = Currency()
 
-print(myPort.holdings)
-print(myPort.holdingsCost)
+myPort.addHolding()
+myPort.printHoldings()
+myPort.findTotal()
+
+myCurr.buy()
+
